@@ -129,12 +129,11 @@ packages:
   flutter_feature_camera:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v0.0.1-beta"
-      resolved-ref: "116748747d95aadb6a40de60d12dacecfd784917"
-      url: "https://github.com/fadlurahmanfdev/flutter_feature_camera.git"
-    source: git
-    version: "0.0.1"
+      name: flutter_feature_camera
+      sha256: "6f598ef441f1b28f460acb2350adf9751e67eea6dc7240c18133f85f13be1a15"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-beta"
   flutter_feature_face_detection:
     dependency: "direct main"
     description:
@@ -374,5 +373,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.3.3 <4.0.0"
+  dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.16.6"

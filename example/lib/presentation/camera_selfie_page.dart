@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:example/presentation/preview_image_page.dart';
+import 'package:example/data/dto/model/face_detection_model.dart';
+import 'package:example/presentation/preview_face_detection_page.dart';
 import 'package:example/presentation/widget/camera_control_layout_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feature_camera/flutter_feature_camera.dart';
@@ -13,25 +14,27 @@ class CameraSelfiePage extends StatefulWidget {
   State<CameraSelfiePage> createState() => _CameraSelfiePageState();
 }
 
-class _CameraSelfiePageState extends State<CameraSelfiePage> with BaseFeatureCamera {
+class _CameraSelfiePageState extends State<CameraSelfiePage> with BaseMixinFeatureCameraV2 {
   FaceDetectionRepository repository = FaceDetectionRepositoryImpl(
-    faceDetector: FaceDetector(
-      options: FaceDetectorOptions(),
-    ),
+    faceDetector: FlutterFaceDetection.getStreamingFaceDetector(),
   );
 
   @override
   void initState() {
     super.initState();
     addListener(
-      onCameraInitialized: () {
-        setState(() {});
-      },
       onFlashModeChanged: (flashMode) {
         setState(() {});
       },
     );
-    initializeCamera(cameraLensDirection: CameraLensDirection.front);
+    initializeCamera(
+      cameraLensDirection: CameraLensDirection.front,
+      onCameraInitialized: onCameraInitialized,
+    );
+  }
+
+  void onCameraInitialized(_) {
+    setState(() {});
   }
 
   @override
@@ -53,14 +56,9 @@ class _CameraSelfiePageState extends State<CameraSelfiePage> with BaseFeatureCam
             child: cameraController?.value.isInitialized == true ? CameraPreview(cameraController!) : Container(),
           ),
           IgnorePointer(
-            child: ClipPath(
-              clipper: CircleClipper(),
-              child: CustomPaint(
-                painter: CirclePainter(),
-                child: Container(
-                  color: Colors.black.withOpacity(0.8),
-                ),
-              ),
+            child: CustomPaint(
+              painter: CirclePainterV2(),
+              child: Container(),
             ),
           ),
           Align(
@@ -84,15 +82,25 @@ class _CameraSelfiePageState extends State<CameraSelfiePage> with BaseFeatureCam
       if (file != null) {
         final inputImage = InputImage.fromFilePath(file.path);
         final faces = await repository.detectFace(inputImage);
+        final bytes = await file.readAsBytes();
+        final base64Image = base64.encode(bytes);
+        final FaceDetectionModel faceDetectionModel = FaceDetectionModel(
+          base64Image: base64Image,
+          leftEyeOpenProbability: -1.0,
+          smilingProbability: -1.0,
+          rightEyeOpenProbability: -1.0,
+        );
         for (int i = 0; i < faces.length; i++) {
+          final face = faces[i];
           print("FACE $i, LEFT EYE OPEN PROBABILITY: ${faces[i].leftEyeOpenProbability}");
           print("FACE $i, RIGHT EYE OPEN PROBABILITY: ${faces[i].rightEyeOpenProbability}");
           print("FACE $i, SMILING PROBABILITY: ${faces[i].smilingProbability}");
+          faceDetectionModel.leftEyeOpenProbability = face.leftEyeOpenProbability ?? -1.0;
+          faceDetectionModel.rightEyeOpenProbability = face.rightEyeOpenProbability ?? -1.0;
+          faceDetectionModel.smilingProbability = face.smilingProbability ?? -1.0;
         }
-        final bytes = await file.readAsBytes();
-        final base64Image = base64.encode(bytes);
         if (mounted) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => PreviewImagePage(base64Image: base64Image)));
+          Navigator.of(context).pop(faceDetectionModel);
         }
       }
     });

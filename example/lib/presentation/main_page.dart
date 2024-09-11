@@ -1,5 +1,6 @@
 import 'package:example/data/dto/model/feature_model.dart';
 import 'package:example/presentation/camera_selfie_page.dart';
+import 'package:example/presentation/preview_face_detection_page.dart';
 import 'package:example/presentation/widget/feature_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   List<FeatureModel> features = [
     FeatureModel(
-      title: 'ID Card Camera',
-      desc: 'ID Card Camera',
-      key: 'ID_CARD_CAMERA',
+      title: 'Face Detection',
+      desc: 'Face Detection',
+      key: 'FACE_DETECTION',
     ),
   ];
 
@@ -37,8 +38,8 @@ class _MainPageState extends State<MainPage> {
           return GestureDetector(
             onTap: () async {
               switch (feature.key) {
-                case "ID_CARD_CAMERA":
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CameraSelfiePage()));
+                case "FACE_DETECTION":
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PreviewFaceDetectionPage()));
                   break;
               }
             },

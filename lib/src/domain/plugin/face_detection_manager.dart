@@ -1,6 +1,6 @@
 import 'package:flutter_feature_face_detection/flutter_feature_face_detection.dart';
 
-class FaceDetectionManager {
+class FlutterFaceDetection {
   static FaceDetector getStreamingFaceDetector() {
     return FaceDetector(
       options: FaceDetectorOptions(
