@@ -51,13 +51,20 @@ class FlutterFaceDetection {
       log("failed to get format, format is null");
       return null;
     }
+
+    final planes = cameraImage.planes;
+    if (planes.isEmpty) {
+      log("planes is empty");
+      return null;
+    }
+
     return InputImage.fromBytes(
       bytes: nv21CameraImageBytes,
       metadata: InputImageMetadata(
         size: Size(cameraImage.width.toDouble(), cameraImage.height.toDouble()),
         rotation: rotation,
         format: format,
-        bytesPerRow: cameraImage.planes.first.bytesPerRow,
+        bytesPerRow: planes.first.bytesPerRow,
       ),
     );
   }
