@@ -1,5 +1,6 @@
 import 'package:example/data/dto/model/feature_model.dart';
 import 'package:example/presentation/camera_selfie_page.dart';
+import 'package:example/presentation/camera_selfie_stream_page.dart';
 import 'package:example/presentation/preview_face_detection_page.dart';
 import 'package:example/presentation/widget/feature_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,11 @@ class _MainPageState extends State<MainPage> {
       title: 'Face Detection',
       desc: 'Face Detection',
       key: 'FACE_DETECTION',
+    ),
+    FeatureModel(
+      title: 'Stream Face Detection',
+      desc: 'Stream Face Detection',
+      key: 'STREAM_FACE_DETECTION',
     ),
   ];
 
@@ -40,6 +46,9 @@ class _MainPageState extends State<MainPage> {
               switch (feature.key) {
                 case "FACE_DETECTION":
                   Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PreviewFaceDetectionPage()));
+                  break;
+                case "STREAM_FACE_DETECTION":
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CameraSelfieStreamPage()));
                   break;
               }
             },

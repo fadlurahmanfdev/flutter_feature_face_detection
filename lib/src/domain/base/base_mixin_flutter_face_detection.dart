@@ -1,0 +1,3 @@
+mixin class BaseMixinFlutterFaceDetection {
+
+}

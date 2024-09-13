@@ -1,0 +1,1 @@
+export 'package:flutter_feature_camera/flutter_feature_camera.dart';

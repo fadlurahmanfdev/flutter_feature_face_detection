@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_feature_camera:
+    path: ../flutter_feature_camera
   google_mlkit_face_detection: ^0.11.0
 
 dev_dependencies:
