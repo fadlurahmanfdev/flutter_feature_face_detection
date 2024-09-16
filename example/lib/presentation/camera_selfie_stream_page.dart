@@ -58,7 +58,9 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
           ),
           IgnorePointer(
             child: CustomPaint(
-              painter: CirclePainterV2(),
+              painter: CirclePainterV2(
+                progress: progress,
+              ),
               child: Container(),
             ),
           ),
@@ -125,6 +127,8 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
 
   void onSwitchCameraTap() {}
 
+  double progress = 0.0;
+
   Future<void> onImageStream(
     CameraImage cameraImage,
     int sensorOrientation,
@@ -143,16 +147,28 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
         if (result.isComplete) {
           await stopImageStream();
           if (mounted) {
-            setState(() {});
+            setState(() {
+              progress = 1.0;
+            });
           }
+        } else {
+          setState(() {
+            progress = result.progress;
+          });
         }
       } else if (!isREOLECSuccess) {
         final result = await detectLivenessRightEyeOpenAndLeftEyeClose(inputImage);
         if (result.isComplete) {
           await stopImageStream();
           if (mounted) {
-            setState(() {});
+            setState(() {
+              progress = 1.0;
+            });
           }
+        } else {
+          setState(() {
+            progress = result.progress;
+          });
         }
       } else if (!isSmiling) {
         final result = await detectSmiling(inputImage);
@@ -161,6 +177,10 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
           if (mounted) {
             Navigator.pop(context);
           }
+        } else {
+          setState(() {
+            progress = result.progress;
+          });
         }
       }
     }
