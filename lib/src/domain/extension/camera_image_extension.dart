@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter_feature_camera/camera.dart';
 
 extension CameraImageExtension on CameraImage {
+  // reference from https://github.com/flutter/flutter/issues/145961#issuecomment-2134763818
   Uint8List getNv21Uint8List() {
     final width = this.width;
     final height = this.height;

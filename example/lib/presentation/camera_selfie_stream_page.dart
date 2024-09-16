@@ -1,9 +1,9 @@
 import 'package:example/presentation/widget/camera_control_layout_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/services/system_chrome.dart';
 import 'package:flutter_feature_camera/camera.dart';
 import 'package:flutter_feature_camera/flutter_feature_camera.dart';
 import 'package:flutter_feature_face_detection/flutter_feature_face_detection.dart';
-import 'package:flutter_feature_face_detection/google_mlkit_face_detection.dart';
 
 class CameraSelfieStreamPage extends StatefulWidget {
   const CameraSelfieStreamPage({super.key});
@@ -12,7 +12,8 @@ class CameraSelfieStreamPage extends StatefulWidget {
   State<CameraSelfieStreamPage> createState() => _CameraSelfieStreamPageState();
 }
 
-class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage> with BaseMixinFeatureCameraV2 {
+class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
+    with BaseMixinFlutterFaceDetectionCamera, BaseMixinFeatureCameraV2 {
   FaceDetectionRepository repository = FaceDetectionRepositoryImpl(
     faceDetector: FlutterFaceDetection.getStreamingFaceDetector(),
   );
@@ -33,6 +34,8 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage> with Ba
 
   void onCameraInitialized(_) {
     setState(() {});
+
+    initializeLivenessFaceDetection();
   }
 
   @override
@@ -59,6 +62,26 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage> with Ba
               child: Container(),
             ),
           ),
+          Positioned(
+            left: 0.0,
+            right: 0.0,
+            bottom: 200.0,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              decoration: BoxDecoration(color: Colors.white),
+              child: Text(
+                !isLEORECSuccess
+                    ? 'Please open your left eye and keep your right eye close to continue'
+                    : !isREOLECSuccess
+                        ? 'Now please close your left eye and keep your right eye open to continue'
+                        : !isSmiling
+                            ? 'Last please give us a smile!'
+                            : '-',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: CameraControlLayoutWidget(
@@ -83,33 +106,63 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage> with Ba
         isStream = true;
       });
       startImageStream(
-        onImageStream: (cameraImage, sensorOrientation, deviceOrientation, cameraLensDirection) async {
-          final inputImage = FlutterFaceDetection.inputImageFromCameraImage(
-            cameraImage,
-            sensorOrientation: sensorOrientation,
-            deviceOrientation: deviceOrientation,
-            cameraLensDirection: cameraLensDirection,
-          );
-          if (inputImage != null) {
-            final faces = await repository.detectFace(inputImage);
-            for (int i = 0; i < faces.length; i++) {
-              final face = faces[i];
-              print("FACE $i, LEFT EYE OPEN PROBABILITY: ${face.leftEyeOpenProbability}");
-              print("FACE $i, RIGHT EYE OPEN PROBABILITY: ${face.rightEyeOpenProbability}");
-              print("FACE $i, SMILING PROBABILITY: ${face.smilingProbability}");
-            }
-          }
-        },
+        onImageStream: onImageStream,
       );
     } else {
-      setState(() {
-        isStream = false;
-      });
       stopImageStream();
     }
+  }
+
+  @override
+  Future<void> stopImageStream() {
+    setState(() {
+      isStream = false;
+    });
+    return super.stopImageStream();
   }
 
   void onFlashTap() {}
 
   void onSwitchCameraTap() {}
+
+  Future<void> onImageStream(
+    CameraImage cameraImage,
+    int sensorOrientation,
+    DeviceOrientation deviceOrientation,
+    CameraLensDirection cameraLensDirection,
+  ) async {
+    final inputImage = FlutterFaceDetection.inputImageFromCameraImage(
+      cameraImage,
+      sensorOrientation: sensorOrientation,
+      deviceOrientation: deviceOrientation,
+      cameraLensDirection: cameraLensDirection,
+    );
+    if (inputImage != null) {
+      if (!isLEORECSuccess) {
+        final result = await detectLivenessLeftEyeOpenAndRightEyeClose(inputImage);
+        if (result.isComplete) {
+          await stopImageStream();
+          if (mounted) {
+            setState(() {});
+          }
+        }
+      } else if (!isREOLECSuccess) {
+        final result = await detectLivenessRightEyeOpenAndLeftEyeClose(inputImage);
+        if (result.isComplete) {
+          await stopImageStream();
+          if (mounted) {
+            setState(() {});
+          }
+        }
+      } else if (!isSmiling) {
+        final result = await detectSmiling(inputImage);
+        if (result.isComplete) {
+          await stopImageStream();
+          if (mounted) {
+            Navigator.pop(context);
+          }
+        }
+      }
+    }
+  }
 }
