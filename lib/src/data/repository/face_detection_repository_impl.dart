@@ -40,4 +40,7 @@ class FaceDetectionRepositoryImpl extends FaceDetectionRepository {
     final faces = await detectFaceFromFilePath(path);
     return faces.isNotEmpty && faces.length == 1;
   }
+
+  @override
+  Future<void> close() => faceDetector.close();
 }

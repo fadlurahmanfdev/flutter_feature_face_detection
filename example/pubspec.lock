@@ -129,17 +129,18 @@ packages:
   flutter_feature_camera:
     dependency: "direct main"
     description:
-      path: "../../flutter_feature_camera"
-      relative: true
-    source: path
-    version: "0.0.4-beta"
+      name: flutter_feature_camera
+      sha256: "10067cdfe3cd5d5ca5ef1928cc24eac327fe5de84f9d2091707096ac48770b91"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6-beta"
   flutter_feature_face_detection:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.1-beta"
   flutter_lints:
     dependency: "direct dev"
     description:

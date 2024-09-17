@@ -1,3 +1,5 @@
-## 0.0.1
+## 0.0.1-beta
 
-* TODO: Describe initial release.
+* Base Camera Mixin Flutter Face Detection
+* Liveness Detection
+* Repository FaceDetection

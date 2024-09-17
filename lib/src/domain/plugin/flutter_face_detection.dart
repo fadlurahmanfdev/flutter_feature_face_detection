@@ -14,8 +14,28 @@ class FlutterFaceDetection {
     DeviceOrientation.landscapeRight: 270,
   };
 
-  /// - [sensorOrientation] from [CameraDescription.sensorOrientation]
-  /// - [deviceOrientation] from [CameraController.value.deviceOrientation]
+  /// Converts a [CameraImage] to an [InputImage] for processing with ML Kit.
+  ///
+  /// This function handles the conversion of camera image data to the [InputImage]
+  /// format required by ML Kit, taking into account device-specific orientations
+  /// and rotations.
+  ///
+  /// Parameters:
+  /// - [cameraImage]: The [CameraImage] captured from the camera.
+  /// - [sensorOrientation]: The orientation of the camera sensor in degrees.
+  /// - [deviceOrientation]: The current [DeviceOrientation] of the device.
+  /// - [cameraLensDirection]: The [CameraLensDirection] (front or back facing).
+  ///
+  /// Returns:
+  /// An [InputImage] object if conversion is successful, or `null` if it fails.
+  ///
+  /// Note:
+  /// - On Android, this function calculates rotation compensation based on sensor
+  ///   and device orientations.
+  /// - On iOS, the rotation is directly derived from the sensor orientation.
+  /// - The function handles platform-specific image format conversions and rotations.
+  /// - It's used to prepare camera images for ML Kit vision APIs, ensuring correct
+  ///   orientation and format for processing.
   static InputImage? inputImageFromCameraImage(
     CameraImage cameraImage, {
     required int sensorOrientation,

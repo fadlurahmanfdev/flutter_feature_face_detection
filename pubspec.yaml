@@ -1,7 +1,6 @@
 name: flutter_feature_face_detection
 description: Flutter Feature Face Detection
-version: 0.0.1
-publish_to: none
+version: 0.0.1-beta
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -11,8 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_feature_camera:
-    path: ../flutter_feature_camera
+  flutter_feature_camera: ^0.0.5-beta
   google_mlkit_face_detection: ^0.11.0
 
 dev_dependencies:
