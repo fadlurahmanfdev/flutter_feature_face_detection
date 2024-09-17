@@ -1,6 +1,7 @@
 name: flutter_feature_face_detection
 description: Flutter Feature Face Detection
 version: 0.0.1-beta
+homepage: https://github.com/fadlurahmanfdev/flutter_feature_face_detection
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
