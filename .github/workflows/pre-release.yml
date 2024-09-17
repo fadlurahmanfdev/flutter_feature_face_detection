@@ -1,12 +1,14 @@
-name: Publish Pub Dev & Create Release
+name: Pre Release (Check Tag & Dry Only Publish Pub Dev)
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
     permissions:
       id-token: write
       contents: read
@@ -17,20 +19,12 @@ jobs:
         run: |
           echo "TAG VERSION: $GITHUB_REF_NAME"
           echo "TAG VERSION: ${{  github.ref_name }}"
-      - name: Publish To Pub Dev
+      - name: Check Pre Release Pub Dev
         uses: k-paxian/dart-package-publisher@master
         with:
           accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
           refreshToken: ${{ secrets.PUB_REFRESH_TOKEN }}
           flutterBranch: 'flutter-3.19-candidate.5'
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
-          draft: false
-          prerelease: false
+          dryRunOnly: true
+          force: false
           
