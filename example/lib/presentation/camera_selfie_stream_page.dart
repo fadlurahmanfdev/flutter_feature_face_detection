@@ -60,6 +60,8 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
             child: CustomPaint(
               painter: CirclePainterV2(
                 progress: progress,
+                strokeWidth: 4.0,
+                overlayColor: Colors.white
               ),
               child: Container(),
             ),
@@ -69,9 +71,9 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
             right: 0.0,
             bottom: 200.0,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              decoration: BoxDecoration(color: Colors.white),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              decoration: const BoxDecoration(color: Colors.white),
               child: Text(
                 !isLEORECSuccess
                     ? 'Please open your left eye and keep your right eye close to continue'
@@ -87,11 +89,11 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
           Align(
             alignment: Alignment.bottomCenter,
             child: CameraControlLayoutWidget(
-              flashIcon: Icon(Icons.flash_off),
+              flashIcon: const Icon(Icons.flash_off),
               onFlashTap: onFlashTap,
-              captureIcon: isStream ? Icon(Icons.stop) : Icon(Icons.fiber_manual_record),
+              captureIcon: isStream ? const Icon(Icons.stop) : const Icon(Icons.fiber_manual_record),
               onCaptureTap: onStreamTap,
-              switchCameraIcon: Icon(Icons.autorenew),
+              switchCameraIcon: const Icon(Icons.autorenew),
               onSwitchCameraTap: onSwitchCameraTap,
             ),
           ),
@@ -150,6 +152,13 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
             setState(() {
               progress = 1.0;
             });
+            Future.delayed(const Duration(seconds: 1), () {
+              if (mounted) {
+                setState(() {
+                  progress = 0.0;
+                });
+              }
+            });
           }
         } else {
           setState(() {
@@ -163,6 +172,13 @@ class _CameraSelfieStreamPageState extends State<CameraSelfieStreamPage>
           if (mounted) {
             setState(() {
               progress = 1.0;
+            });
+            Future.delayed(const Duration(seconds: 1), () {
+              if (mounted) {
+                setState(() {
+                  progress = 0.0;
+                });
+              }
             });
           }
         } else {

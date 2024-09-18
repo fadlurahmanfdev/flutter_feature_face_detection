@@ -26,6 +26,17 @@ detection, such as biometric verification, security, and user authentication.
 
 ## Features
 
+<table>
+  <tr>
+    <td>
+		<img width="250px" src="https://raw.githubusercontent.com/fadlurahmanfdev/flutter_feature_face_detection/master/media/face_detection_single_shot.mp4">
+    </td>
+    <td>
+       <img width="250px" src="https://raw.githubusercontent.com/fadlurahmanfdev/flutter_feature_face_detection/master/media/face_detection_streaming.mp4">
+    </td>
+  </tr>
+</table>
+
 ### Liveness Face Detection
 
 #### Detect Left Eye Close & Right Eye Open
