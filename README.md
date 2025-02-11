@@ -1,20 +1,12 @@
-# flutter_face_detection
+# Description
 
-`flutter_face_detection` is a Flutter package designed to streamline face detection and liveness
-face detection for developers. It combines the powerful functionality of the Flutter camera library
-and Google ML Kit, enabling seamless integration into camera-based applications. The package is
-optimized for detecting facial features, such as eye openness and smiling, with configurable
-thresholds, making it ideal for liveness verification scenarios.
+Flutter library handle/perform face detection, liveness detection, etc.
 
 ## Key Features:
 
 - **Face Detection**: Accurately detects faces in real-time using Google ML Kit.
 - **Liveness Detection**: Supports advanced liveness detection by analyzing facial movements such as
   eye openness and smiling.
-- **Threshold Customization**: Developers can easily adjust thresholds for detecting eye openness
-  and smiles to suit various use cases.
-- **Camera Integration**: Combines with the `flutter_feature_camera` library to handle camera
-  functions like image streaming and camera switching.
 
 ## Dependencies:
 
